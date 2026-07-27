@@ -6,149 +6,180 @@
 <title>Menu Board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --butter:#F6E7C9;
-    --butter-deep:#F0DBAE;
-    --ink:#3B2418;
-    --ink-soft:#6B4A38;
-    --raspberry:#C23B5D;
-    --pistachio:#7A8B5C;
-    --caramel:#C9902E;
-    --card:#FFFBF2;
+    --deep:#08355C;
+    --mid:#146FA6;
+    --light:#5FB4E0;
+    --glass:rgba(255,255,255,0.10);
+    --glass-border:rgba(255,255,255,0.22);
+    --ink:#FFFFFF;
+    --ink-soft:rgba(255,255,255,0.72);
+    --gold:#F2C14E;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--butter);
-    background-image:
-      radial-gradient(circle at 15% 10%, var(--butter-deep) 0%, transparent 45%),
-      radial-gradient(circle at 85% 90%, var(--butter-deep) 0%, transparent 45%);
+    background:linear-gradient(160deg, var(--deep) 0%, var(--mid) 55%, var(--light) 100%);
     color:var(--ink);
-    font-family:'Work Sans', sans-serif;
+    font-family:'Inter', sans-serif;
     min-height:100vh;
-    padding:3.5vh 3vw 2vh;
+    padding:3.2vh 2.6vw 2vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 10% 15%, rgba(255,255,255,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 90% 85%, rgba(255,255,255,0.08) 0%, transparent 45%);
+    pointer-events:none;
   }
 
   /* ---------- Header ---------- */
   header{
     text-align:center;
-    margin-bottom:2.5vh;
+    margin-bottom:2.4vh;
     position:relative;
   }
   .shop-name{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:clamp(2.4rem, 5vw, 4.2rem);
+    font-family:'Poppins', sans-serif;
+    font-weight:700;
+    font-size:clamp(2.2rem, 4.6vw, 3.8rem);
     letter-spacing:-0.01em;
     margin:0;
-    line-height:1;
+    line-height:1.05;
   }
   .tagline{
-    font-size:clamp(0.9rem, 1.4vw, 1.15rem);
+    font-size:clamp(0.85rem, 1.3vw, 1.05rem);
     color:var(--ink-soft);
-    letter-spacing:0.08em;
+    letter-spacing:0.12em;
     text-transform:uppercase;
-    margin:0.6rem 0 0;
+    margin:0.5rem 0 0;
+    font-weight:500;
   }
-  .flourish{
+  .wave{
     display:block;
-    width:220px;
-    height:14px;
-    margin:1.1rem auto 0;
+    width:260px;
+    height:16px;
+    margin:1rem auto 0;
+    opacity:0.85;
   }
 
   /* ---------- Grid ---------- */
   .board{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
-    gap:1.4vw;
-    max-width:1600px;
+    grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
+    gap:1.3vw;
+    max-width:1650px;
     margin:0 auto;
+    position:relative;
   }
+  .board.few-categories{ max-width:1150px; }
+  .board.few-categories .item-name{ font-size:1.16rem; }
+  .board.few-categories .item-desc{ font-size:0.9rem; }
+  .board.few-categories .item-price{ font-size:1.22rem; }
+  .board.few-categories .cat-name{ font-size:clamp(1.6rem, 2.4vw, 2.1rem); }
+  .board.few-categories .item-thumb{ width:60px; height:60px; }
 
   .category{
-    background:var(--card);
-    border-radius:22px;
-    padding:1.6rem 1.7rem 1.5rem;
-    position:relative;
-    box-shadow:0 1px 0 rgba(59,36,24,0.05);
-    border:1px solid rgba(59,36,24,0.08);
+    background:var(--glass);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:26px;
+    padding:1.5rem 1.6rem 1.4rem;
+    border:1px solid var(--glass-border);
   }
 
   .cat-header{
     display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    margin-bottom:0.3rem;
+    align-items:center;
+    gap:0.6rem;
+    margin-bottom:0.7rem;
   }
   .cat-name{
-    font-family:'Fraunces', serif;
+    font-family:'Poppins', sans-serif;
     font-weight:600;
-    font-size:clamp(1.35rem, 2vw, 1.7rem);
-    color:var(--raspberry);
+    font-size:clamp(1.3rem, 1.9vw, 1.6rem);
+    color:var(--gold);
     margin:0;
   }
-  .cat-name.pistachio{ color:var(--pistachio); }
-  .cat-name.caramel{ color:var(--caramel); }
-
-  .scallop{
-    width:100%;
-    height:10px;
-    margin:0.5rem 0 0.9rem;
-    display:block;
+  .cat-underline{
+    height:3px;
+    width:42px;
+    background:var(--gold);
+    border-radius:3px;
+    margin:0 0 0.9rem;
+    opacity:0.85;
   }
 
   .item{
     display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    gap:0.6rem;
-    padding:0.55rem 0;
-    border-bottom:1px dashed rgba(59,36,24,0.15);
+    align-items:center;
+    gap:0.7rem;
+    padding:0.5rem 0;
+    border-bottom:1px solid rgba(255,255,255,0.12);
   }
   .item:last-child{ border-bottom:none; }
+
+  .item-thumb{
+    width:46px;
+    height:46px;
+    border-radius:12px;
+    object-fit:cover;
+    flex-shrink:0;
+    background:rgba(255,255,255,0.08);
+  }
 
   .item-info{ flex:1; min-width:0; }
   .item-name{
     font-weight:500;
-    font-size:1.02rem;
+    font-size:0.98rem;
     margin:0;
   }
   .item-desc{
-    font-size:0.8rem;
+    font-size:0.76rem;
     color:var(--ink-soft);
-    margin:0.15rem 0 0;
-    line-height:1.35;
+    margin:0.1rem 0 0;
+    line-height:1.3;
   }
   .item-price{
-    font-family:'Fraunces', serif;
+    font-family:'Poppins', sans-serif;
     font-weight:600;
-    font-size:1.05rem;
-    color:var(--ink);
+    font-size:1rem;
+    color:var(--gold);
     white-space:nowrap;
   }
   .badge{
     display:inline-block;
-    font-size:0.62rem;
+    font-size:0.6rem;
     font-weight:600;
-    letter-spacing:0.06em;
+    letter-spacing:0.05em;
     text-transform:uppercase;
-    background:var(--caramel);
-    color:var(--card);
-    padding:0.12rem 0.45rem;
+    background:var(--gold);
+    color:var(--deep);
+    padding:0.1rem 0.4rem;
     border-radius:20px;
     margin-left:0.4rem;
     vertical-align:2px;
   }
+  .unsure{
+    font-size:0.62rem;
+    color:#FFD9D9;
+    font-weight:600;
+    margin-left:0.35rem;
+  }
 
   footer{
     text-align:center;
-    margin-top:2.5vh;
-    font-size:0.78rem;
+    margin-top:2.2vh;
+    font-size:0.76rem;
     color:var(--ink-soft);
-    letter-spacing:0.03em;
+    letter-spacing:0.02em;
+    position:relative;
   }
 </style>
 </head>
@@ -157,8 +188,9 @@
 <header>
   <p class="tagline" id="tagline-out"></p>
   <h1 class="shop-name" id="name-out"></h1>
-  <svg class="flourish" viewBox="0 0 220 14" preserveAspectRatio="none">
-    <path d="M0 7 Q 18 -3, 36 7 T 72 7 T 108 7 T 144 7 T 180 7 T 216 7" fill="none" stroke="#C9902E" stroke-width="2.5" stroke-linecap="round"/>
+  <svg class="wave" viewBox="0 0 260 16" preserveAspectRatio="none">
+    <path d="M0 8 Q 10 0, 20 8 T 40 8 T 60 8 T 80 8 T 100 8 T 120 8 T 140 8 T 160 8 T 180 8 T 200 8 T 220 8 T 240 8 T 260 8"
+    fill="none" stroke="#F2C14E" stroke-width="2.5" stroke-linecap="round"/>
   </svg>
 </header>
 
@@ -169,74 +201,111 @@
 <script>
 /* ======================================================================
    EDIT YOUR MENU HERE — everything below this box is safe to change.
-   - Update SHOP.name / SHOP.tagline / SHOP.footer for the header & footer.
-   - Each category has a "color" (raspberry / pistachio / caramel) and a
-     list of items: name, price, and an optional short desc or badge.
-   - To change a price: just edit the number after "price:".
-   - To add an item: copy an existing { ...} line inside "items" and edit it.
-   - To add a whole new category: copy a whole { name: ... } block below.
+
+   ADDING PHOTOS: upload your photos into an "images" folder next to
+   this file (same repository), then add a line like:
+       img: "images/lotusella.jpg"
+   to any item. If you skip "img" for an item, it just shows text —
+   nothing breaks. Square photos (roughly same width and height) look best.
+
+   Each category has a "screen" number: 1, 2, or 3 — that's what decides
+   which TV it shows up on.
+
    Do NOT touch anything after the "STOP EDITING" line further down.
 ====================================================================== */
 
 const SHOP = {
-  name: "Maple & Batter",
-  tagline: "Crepes · Waffles · Coffee",
-  footer: "Ask us about dietary substitutions · Prices include tax"
+  name: "Bluestreet",
+  tagline: "Crepes · Waffles · Cakes · Coffee",
+  footer: "Milk alternative +1 · Upsize +0.50 · Extra flavor +1 · Extra shot +2"
 };
 
 const MENU = [
   {
     name: "Crepes & Waffles",
-    color: "raspberry",
+    screen: 1,
     items: [
-      { name: "Classic Belgian Waffle", price: 7.50, desc: "Whipped cream, maple syrup" },
-      { name: "Nutella Banana Crepe", price: 8.25, badge: "Popular" },
-      { name: "Strawberry Shortcake Waffle", price: 9.00, desc: "Fresh strawberries, cream" },
-      { name: "Savory Ham & Cheese Crepe", price: 9.75 },
-      { name: "Lemon Sugar Crepe", price: 6.75 }
+      { name: "Bluestreet Special", price: 19.90, desc: "Lotus Butter & Biscoff, Milk Chocolate, Oreo, Pistachio, Strawberry & Banana" },
+      { name: "Lotusella", price: 17.90, desc: "Nutella, Strawberry & Banana, Lotus Butter & Biscoff" },
+      { name: "Dubai Chocolate", price: 19.90, desc: "Milk Chocolate, Kunafa Filling, Butter & Crushed Pistachio" },
+      { name: "Oreo", price: 15.90, desc: "Nutella, Banana, Oreo, White Chocolate Drizzle" },
+      { name: "Cheesecake Melt", price: 15.90, desc: "Milk & White Chocolate, Cheesecake Bites, Strawberry" },
+      { name: "Biscoff", price: 15.90, desc: "Lotus Butter, Biscoff, Banana, White Choc Drizzle" },
+      { name: "Ferrero", price: 15.90, desc: "Nutella, Strawberry, Ferrero, White Choc Drizzle" },
+      { name: "Kinder", price: 15.90, desc: "Nutella, Kinder Bueno & Stick, White Choc Drizzle" },
+      { name: "Triple Chocolate", price: 15.90, desc: "Milk, White & Dark Chocolate" },
+      { name: "Strawberry Banana", price: 16.90, desc: "Nutella, Strawberry & Banana" },
+      { name: "Pistachio", price: 17.90, desc: "Butter & Crushed Pistachio, Banana, White Choc Drizzle" },
+      { name: "Red Velvet", price: 15.90, desc: "Nutella, Red Velvet Cake, Strawberry, White Choc Drizzle" },
+      { name: "Fudgin Browni", price: 15.90, desc: "Milk Chocolate, Brownie Bites, Strawberry, White Choc Drizzle" },
+      { name: "Nutella Dream", price: 14.90, desc: "Only Nutella" }
     ]
   },
   {
     name: "Cakes",
-    color: "caramel",
+    screen: 2,
     items: [
-      { name: "Carrot Cake Slice", price: 5.50 },
-      { name: "Chocolate Fudge Slice", price: 5.75, badge: "Popular" },
-      { name: "New York Cheesecake", price: 6.25 },
-      { name: "Red Velvet Slice", price: 5.75 }
-    ]
-  },
-  {
-    name: "Refreshers",
-    color: "pistachio",
-    items: [
-      { name: "Strawberry Basil Refresher", price: 5.25 },
-      { name: "Peach Mango Refresher", price: 5.25 },
-      { name: "Cucumber Mint Refresher", price: 5.00 },
-      { name: "Passionfruit Refresher", price: 5.50 }
+      { name: "Dubai Chocolate (cup)", price: 18.90, unsure: true },
+      { name: "Strawberry Choc (cup)", price: 16.90 },
+      { name: "Lava Cake", price: 9.90, unsure: true },
+      { name: "Chocolate Chip Melt", price: 9.90, unsure: true },
+      { name: "Tiramisu", price: 9.90 },
+      { name: "Brownie", price: 8.90 },
+      { name: "Chocolate Cake", price: 8.90 },
+      { name: "Red Velvet Cake", price: 8.90 },
+      { name: "Cheesecake", price: 8.90 }
     ]
   },
   {
     name: "Shakes",
-    color: "raspberry",
+    screen: 2,
     items: [
-      { name: "Classic Vanilla Shake", price: 6.50 },
-      { name: "Chocolate Fudge Shake", price: 6.75 },
-      { name: "Cookies & Cream Shake", price: 7.00, badge: "Popular" },
-      { name: "Caramel Pecan Shake", price: 7.25 }
+      { name: "Ferrero", price: 11.90, desc: "Nutella, Crushed Hazelnut, Ferrero Rocher" },
+      { name: "Biscoff", price: 11.90, desc: "Lotus Butter, Lotus Cookies" },
+      { name: "Oreo", price: 11.90, desc: "Crushed Oreos" },
+      { name: "Dubai Chocolate", price: 12.90, desc: "Nutella, Pistachio, Kunafa" },
+      { name: "Kinder", price: 11.90, desc: "Nutella, Kinder" },
+      { name: "Strawberry Shortcake", price: 11.90, desc: "Cheesecake, Strawberry Sauce" },
+      { name: "Pistachio", price: 12.90, desc: "Pistachio Butter, Crushed Pistachio" },
+      { name: "Fudgin Brownie", price: 11.90, desc: "Nutella, Brownie Bites" },
+      { name: "Red Velvet", price: 11.90, desc: "Red Velvet Cake" },
+      { name: "Classic", price: 10.90, desc: "Vanilla, Strawberry" }
+    ]
+  },
+  {
+    name: "Refreshers & Mojitos",
+    screen: 2,
+    items: [
+      { name: "Redberry", price: 6.90, desc: "Strawberry, Raspberry" },
+      { name: "Pina Colada", price: 6.90, desc: "Coconut, Pineapple" },
+      { name: "Summer", price: 6.90, desc: "Peach, Watermelon" },
+      { name: "Passion Fruit", price: 6.90, desc: "Strawberry, Mango" },
+      { name: "Blue Raspberry", price: 6.90, desc: "Blue Raspberry" },
+      { name: "Dragon Fruit", price: 6.90, desc: "Dragon Fruit" }
     ]
   },
   {
     name: "Coffee & Tea",
-    color: "caramel",
+    screen: 3,
     items: [
-      { name: "Drip Coffee", price: 4.75, desc: "Small / Medium / Large" },
-      { name: "Latte", price: 4.50 },
-      { name: "Cappuccino", price: 4.25 },
-      { name: "Caramel Macchiato", price: 5.00, badge: "Popular" },
-      { name: "Matcha Latte", price: 5.25 },
-      { name: "Chai Tea Latte", price: 4.50 },
-      { name: "Iced Tea", price: 3.50 }
+      { name: "Drip Coffee", price: 3.90 },
+      { name: "Espresso", price: 3.90 },
+      { name: "Americano", price: 3.90 },
+      { name: "Macchiato", price: 4.90 },
+      { name: "Cortado", price: 4.90 },
+      { name: "Latte", price: 5.90 },
+      { name: "Cold Brew", price: 5.90 },
+      { name: "Iced Coffee", price: 4.90 },
+      { name: "Cappuccino / Flat White", price: 4.90 },
+      { name: "Matcha Latte", price: 6.90 },
+      { name: "Spanish Latte", price: 6.90 },
+      { name: "Brown Sugar Latte", price: 6.90 },
+      { name: "Pistachio Latte", price: 6.90 },
+      { name: "Lotus Latte", price: 6.90 },
+      { name: "Blue Special Latte", price: 7.90 },
+      { name: "Hot Chocolate", price: 5.90 },
+      { name: "Hot / Iced Tea", price: 4.90 },
+      { name: "Turkish Coffee", price: 5.90 }
     ]
   }
 ];
@@ -249,23 +318,25 @@ document.getElementById("footer-out").textContent = SHOP.footer;
 
 const board = document.getElementById("board");
 
-function scallopSVG(color){
-  return `<svg class="scallop" viewBox="0 0 300 10" preserveAspectRatio="none">
-    <path d="M0 5 Q 7.5 0, 15 5 T 30 5 T 45 5 T 60 5 T 75 5 T 90 5 T 105 5 T 120 5 T 135 5 T 150 5 T 165 5 T 180 5 T 195 5 T 210 5 T 225 5 T 240 5 T 255 5 T 270 5 T 285 5 T 300 5"
-    fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-  </svg>`;
+const params = new URLSearchParams(window.location.search);
+const screenNum = params.get("screen");
+const visibleCategories = screenNum
+  ? MENU.filter(cat => String(cat.screen) === screenNum)
+  : MENU;
+
+if (visibleCategories.length <= 2) {
+  board.classList.add("few-categories");
 }
 
-const colorMap = { raspberry: "#C23B5D", pistachio: "#7A8B5C", caramel: "#C9902E" };
-
-MENU.forEach(cat => {
+visibleCategories.forEach(cat => {
   const section = document.createElement("section");
   section.className = "category";
 
   const itemsHTML = cat.items.map(item => `
     <div class="item">
+      ${item.img ? `<img class="item-thumb" src="${item.img}" alt="">` : ""}
       <div class="item-info">
-        <p class="item-name">${item.name}${item.badge ? `<span class="badge">${item.badge}</span>` : ""}</p>
+        <p class="item-name">${item.name}${item.badge ? `<span class="badge">${item.badge}</span>` : ""}${item.unsure ? `<span class="unsure">check price</span>` : ""}</p>
         ${item.desc ? `<p class="item-desc">${item.desc}</p>` : ""}
       </div>
       <span class="item-price">$${Number(item.price).toFixed(2)}</span>
@@ -274,14 +345,20 @@ MENU.forEach(cat => {
 
   section.innerHTML = `
     <div class="cat-header">
-      <h2 class="cat-name ${cat.color}">${cat.name}</h2>
+      <h2 class="cat-name">${cat.name}</h2>
     </div>
-    ${scallopSVG(colorMap[cat.color] || "#C9902E")}
+    <div class="cat-underline"></div>
     ${itemsHTML}
   `;
 
   board.appendChild(section);
 });
+
+setInterval(() => {
+  const url = new URL(window.location.href);
+  url.searchParams.set("_t", Date.now());
+  window.location.href = url.toString();
+}, 5 * 60 * 1000);
 </script>
 </body>
 </html>
