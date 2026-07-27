@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --butter:#F6E7C9;
+    --butter-deep:#F0DBAE;
+    --ink:#3B2418;
+    --ink-soft:#6B4A38;
+    --raspberry:#C23B5D;
+    --pistachio:#7A8B5C;
+    --caramel:#C9902E;
+    --card:#FFFBF2;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--butter);
+    background-image:
+      radial-gradient(circle at 15% 10%, var(--butter-deep) 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, var(--butter-deep) 0%, transparent 45%);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding:3.5vh 3vw 2vh;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    margin-bottom:2.5vh;
+    position:relative;
+  }
+  .shop-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.4rem, 5vw, 4.2rem);
+    letter-spacing:-0.01em;
+    margin:0;
+    line-height:1;
+  }
+  .tagline{
+    font-size:clamp(0.9rem, 1.4vw, 1.15rem);
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:0.6rem 0 0;
+  }
+  .flourish{
+    display:block;
+    width:220px;
+    height:14px;
+    margin:1.1rem auto 0;
+  }
+
+  /* ---------- Grid ---------- */
+  .board{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(310px, 1fr));
+    gap:1.4vw;
+    max-width:1600px;
+    margin:0 auto;
+  }
+
+  .category{
+    background:var(--card);
+    border-radius:22px;
+    padding:1.6rem 1.7rem 1.5rem;
+    position:relative;
+    box-shadow:0 1px 0 rgba(59,36,24,0.05);
+    border:1px solid rgba(59,36,24,0.08);
+  }
+
+  .cat-header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:0.3rem;
+  }
+  .cat-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(1.35rem, 2vw, 1.7rem);
+    color:var(--raspberry);
+    margin:0;
+  }
+  .cat-name.pistachio{ color:var(--pistachio); }
+  .cat-name.caramel{ color:var(--caramel); }
+
+  .scallop{
+    width:100%;
+    height:10px;
+    margin:0.5rem 0 0.9rem;
+    display:block;
+  }
+
+  .item{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:0.6rem;
+    padding:0.55rem 0;
+    border-bottom:1px dashed rgba(59,36,24,0.15);
+  }
+  .item:last-child{ border-bottom:none; }
+
+  .item-info{ flex:1; min-width:0; }
+  .item-name{
+    font-weight:500;
+    font-size:1.02rem;
+    margin:0;
+  }
+  .item-desc{
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin:0.15rem 0 0;
+    line-height:1.35;
+  }
+  .item-price{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.05rem;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .badge{
+    display:inline-block;
+    font-size:0.62rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    background:var(--caramel);
+    color:var(--card);
+    padding:0.12rem 0.45rem;
+    border-radius:20px;
+    margin-left:0.4rem;
+    vertical-align:2px;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:2.5vh;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    letter-spacing:0.03em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="tagline" id="tagline-out"></p>
+  <h1 class="shop-name" id="name-out"></h1>
+  <svg class="flourish" viewBox="0 0 220 14" preserveAspectRatio="none">
+    <path d="M0 7 Q 18 -3, 36 7 T 72 7 T 108 7 T 144 7 T 180 7 T 216 7" fill="none" stroke="#C9902E" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>
+</header>
+
+<main class="board" id="board"></main>
+
+<footer id="footer-out"></footer>
+
+<script>
+/* ======================================================================
+   EDIT YOUR MENU HERE — everything below this box is safe to change.
+   - Update SHOP.name / SHOP.tagline / SHOP.footer for the header & footer.
+   - Each category has a "color" (raspberry / pistachio / caramel) and a
+     list of items: name, price, and an optional short desc or badge.
+   - To change a price: just edit the number after "price:".
+   - To add an item: copy an existing { ...} line inside "items" and edit it.
+   - To add a whole new category: copy a whole { name: ... } block below.
+   Do NOT touch anything after the "STOP EDITING" line further down.
+====================================================================== */
+
+const SHOP = {
+  name: "Maple & Batter",
+  tagline: "Crepes · Waffles · Coffee",
+  footer: "Ask us about dietary substitutions · Prices include tax"
+};
+
+const MENU = [
+  {
+    name: "Crepes & Waffles",
+    color: "raspberry",
+    items: [
+      { name: "Classic Belgian Waffle", price: 7.50, desc: "Whipped cream, maple syrup" },
+      { name: "Nutella Banana Crepe", price: 8.25, badge: "Popular" },
+      { name: "Strawberry Shortcake Waffle", price: 9.00, desc: "Fresh strawberries, cream" },
+      { name: "Savory Ham & Cheese Crepe", price: 9.75 },
+      { name: "Lemon Sugar Crepe", price: 6.75 }
+    ]
+  },
+  {
+    name: "Cakes",
+    color: "caramel",
+    items: [
+      { name: "Carrot Cake Slice", price: 5.50 },
+      { name: "Chocolate Fudge Slice", price: 5.75, badge: "Popular" },
+      { name: "New York Cheesecake", price: 6.25 },
+      { name: "Red Velvet Slice", price: 5.75 }
+    ]
+  },
+  {
+    name: "Refreshers",
+    color: "pistachio",
+    items: [
+      { name: "Strawberry Basil Refresher", price: 5.25 },
+      { name: "Peach Mango Refresher", price: 5.25 },
+      { name: "Cucumber Mint Refresher", price: 5.00 },
+      { name: "Passionfruit Refresher", price: 5.50 }
+    ]
+  },
+  {
+    name: "Shakes",
+    color: "raspberry",
+    items: [
+      { name: "Classic Vanilla Shake", price: 6.50 },
+      { name: "Chocolate Fudge Shake", price: 6.75 },
+      { name: "Cookies & Cream Shake", price: 7.00, badge: "Popular" },
+      { name: "Caramel Pecan Shake", price: 7.25 }
+    ]
+  },
+  {
+    name: "Coffee & Tea",
+    color: "caramel",
+    items: [
+      { name: "Drip Coffee", price: 3.25, desc: "Small / Medium / Large" },
+      { name: "Latte", price: 4.50 },
+      { name: "Cappuccino", price: 4.25 },
+      { name: "Caramel Macchiato", price: 5.00, badge: "Popular" },
+      { name: "Matcha Latte", price: 5.25 },
+      { name: "Chai Tea Latte", price: 4.50 },
+      { name: "Iced Tea", price: 3.50 }
+    ]
+  }
+];
+
+/* ==================== STOP EDITING BELOW THIS LINE ==================== */
+
+document.getElementById("name-out").textContent = SHOP.name;
+document.getElementById("tagline-out").textContent = SHOP.tagline;
+document.getElementById("footer-out").textContent = SHOP.footer;
+
+const board = document.getElementById("board");
+
+function scallopSVG(color){
+  return `<svg class="scallop" viewBox="0 0 300 10" preserveAspectRatio="none">
+    <path d="M0 5 Q 7.5 0, 15 5 T 30 5 T 45 5 T 60 5 T 75 5 T 90 5 T 105 5 T 120 5 T 135 5 T 150 5 T 165 5 T 180 5 T 195 5 T 210 5 T 225 5 T 240 5 T 255 5 T 270 5 T 285 5 T 300 5"
+    fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  </svg>`;
+}
+
+const colorMap = { raspberry: "#C23B5D", pistachio: "#7A8B5C", caramel: "#C9902E" };
+
+MENU.forEach(cat => {
+  const section = document.createElement("section");
+  section.className = "category";
+
+  const itemsHTML = cat.items.map(item => `
+    <div class="item">
+      <div class="item-info">
+        <p class="item-name">${item.name}${item.badge ? `<span class="badge">${item.badge}</span>` : ""}</p>
+        ${item.desc ? `<p class="item-desc">${item.desc}</p>` : ""}
+      </div>
+      <span class="item-price">$${Number(item.price).toFixed(2)}</span>
+    </div>
+  `).join("");
+
+  section.innerHTML = `
+    <div class="cat-header">
+      <h2 class="cat-name ${cat.color}">${cat.name}</h2>
+    </div>
+    ${scallopSVG(colorMap[cat.color] || "#C9902E")}
+    ${itemsHTML}
+  `;
+
+  board.appendChild(section);
+});
+</script>
+</body>
+</html>
