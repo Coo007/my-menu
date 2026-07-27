@@ -20,12 +20,12 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
+  html{ background:#08355C; }
   body{
     background:linear-gradient(160deg, var(--deep) 0%, var(--mid) 55%, var(--light) 100%);
     color:var(--ink);
     font-family:'Inter', sans-serif;
     min-height:100vh;
-    padding:3.2vh 2.6vw 2vh;
     position:relative;
     overflow-x:hidden;
   }
@@ -38,6 +38,25 @@
       radial-gradient(circle at 90% 85%, rgba(255,255,255,0.08) 0%, transparent 45%);
     pointer-events:none;
   }
+
+  /* ---------- Rotation stage ----------
+     If the TV is physically mounted sideways, the browser still thinks
+     it's showing a normal wide picture. #stage rotates the whole page
+     to compensate. Controlled by the ROTATE setting further down. */
+  #stage{
+    padding:3.2vh 2.6vw 2vh;
+  }
+  body.rotate-90 #stage,
+  body.rotate-270 #stage{
+    position:fixed;
+    top:0; left:0;
+    width:100vh;
+    height:100vw;
+    overflow-y:auto;
+    transform-origin:top left;
+  }
+  body.rotate-90 #stage{ transform:rotate(90deg) translateY(-100%); }
+  body.rotate-270 #stage{ transform:rotate(-90deg) translateX(-100%); }
 
   /* ---------- Header ---------- */
   header{
@@ -71,19 +90,13 @@
 
   /* ---------- Grid ---------- */
   .board{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(340px, 1fr));
-    gap:1.3vw;
-    max-width:1650px;
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+    max-width:900px;
     margin:0 auto;
     position:relative;
   }
-  .board.few-categories{ max-width:1150px; }
-  .board.few-categories .item-name{ font-size:1.16rem; }
-  .board.few-categories .item-desc{ font-size:0.9rem; }
-  .board.few-categories .item-price{ font-size:1.22rem; }
-  .board.few-categories .cat-name{ font-size:clamp(1.6rem, 2.4vw, 2.1rem); }
-  .board.few-categories .item-thumb{ width:60px; height:60px; }
 
   .category{
     background:var(--glass);
@@ -103,7 +116,7 @@
   .cat-name{
     font-family:'Poppins', sans-serif;
     font-weight:600;
-    font-size:clamp(1.3rem, 1.9vw, 1.6rem);
+    font-size:clamp(1.5rem, 3.4vw, 2rem);
     color:var(--gold);
     margin:0;
   }
@@ -119,37 +132,48 @@
   .item{
     display:flex;
     align-items:center;
-    gap:0.7rem;
-    padding:0.5rem 0;
+    gap:0.9rem;
+    padding:0.65rem 0;
     border-bottom:1px solid rgba(255,255,255,0.12);
   }
   .item:last-child{ border-bottom:none; }
 
   .item-thumb{
-    width:46px;
-    height:46px;
-    border-radius:12px;
+    width:84px;
+    height:84px;
+    border-radius:14px;
     object-fit:cover;
     flex-shrink:0;
     background:rgba(255,255,255,0.08);
+  }
+  .item-thumb.empty{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1.5px dashed rgba(255,255,255,0.35);
+    font-size:0.6rem;
+    color:var(--ink-soft);
+    text-align:center;
+    line-height:1.2;
+    padding:0.3rem;
   }
 
   .item-info{ flex:1; min-width:0; }
   .item-name{
     font-weight:500;
-    font-size:0.98rem;
+    font-size:1.05rem;
     margin:0;
   }
   .item-desc{
-    font-size:0.76rem;
+    font-size:0.82rem;
     color:var(--ink-soft);
-    margin:0.1rem 0 0;
+    margin:0.15rem 0 0;
     line-height:1.3;
   }
   .item-price{
     font-family:'Poppins', sans-serif;
     font-weight:600;
-    font-size:1rem;
+    font-size:1.1rem;
     color:var(--gold);
     white-space:nowrap;
   }
@@ -184,6 +208,7 @@
 </style>
 </head>
 <body>
+<div id="stage">
 
 <header>
   <p class="tagline" id="tagline-out"></p>
@@ -198,21 +223,33 @@
 
 <footer id="footer-out"></footer>
 
+</div>
+
 <script>
 /* ======================================================================
    EDIT YOUR MENU HERE — everything below this box is safe to change.
 
+   TV IS SIDEWAYS? Set ROTATE below.
+   - ROTATE = 0    → TV displays normally, no rotation needed
+   - ROTATE = 90   → try this first if the TV is mounted turned sideways
+   - ROTATE = 270  → if 90 came out upside-down or backwards, use this instead
+   Just load the page on the TV and see which one looks right — it's
+   safe to try each one, nothing breaks.
+
    ADDING PHOTOS: upload your photos into an "images" folder next to
    this file (same repository), then add a line like:
        img: "images/lotusella.jpg"
-   to any item. If you skip "img" for an item, it just shows text —
-   nothing breaks. Square photos (roughly same width and height) look best.
+   to any item. If you skip "img" for an item, it shows a dashed box
+   marking where a photo could go — nothing breaks. Square photos
+   (roughly same width and height) look best.
 
    Each category has a "screen" number: 1, 2, or 3 — that's what decides
    which TV it shows up on.
 
    Do NOT touch anything after the "STOP EDITING" line further down.
 ====================================================================== */
+
+const ROTATE = 0;
 
 const SHOP = {
   name: "Bluestreet",
@@ -316,6 +353,9 @@ document.getElementById("name-out").textContent = SHOP.name;
 document.getElementById("tagline-out").textContent = SHOP.tagline;
 document.getElementById("footer-out").textContent = SHOP.footer;
 
+if (ROTATE === 90) document.body.classList.add("rotate-90");
+if (ROTATE === 270) document.body.classList.add("rotate-270");
+
 const board = document.getElementById("board");
 
 const params = new URLSearchParams(window.location.search);
@@ -324,17 +364,15 @@ const visibleCategories = screenNum
   ? MENU.filter(cat => String(cat.screen) === screenNum)
   : MENU;
 
-if (visibleCategories.length <= 2) {
-  board.classList.add("few-categories");
-}
-
 visibleCategories.forEach(cat => {
   const section = document.createElement("section");
   section.className = "category";
 
   const itemsHTML = cat.items.map(item => `
     <div class="item">
-      ${item.img ? `<img class="item-thumb" src="${item.img}" alt="">` : ""}
+      ${item.img
+        ? `<img class="item-thumb" src="${item.img}" alt="">`
+        : `<div class="item-thumb empty">add photo</div>`}
       <div class="item-info">
         <p class="item-name">${item.name}${item.badge ? `<span class="badge">${item.badge}</span>` : ""}${item.unsure ? `<span class="unsure">check price</span>` : ""}</p>
         ${item.desc ? `<p class="item-desc">${item.desc}</p>` : ""}
